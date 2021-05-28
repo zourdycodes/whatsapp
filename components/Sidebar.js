@@ -49,7 +49,7 @@ function Sidebar() {
   return (
     <Container>
       <Header>
-        <UserAvatar onClick={() => auth.signOut()} />
+        <UserAvatar src={user.photoURL} onClick={() => auth.signOut()} />
 
         <IconsContainer>
           <IconButton>
@@ -102,13 +102,15 @@ const Search = styled.div`
   border-radius: 2px;
 `;
 
-const Container = styled.div``;
+const Container = styled.div`
+  /* background-color: #121212; */
+`;
 const Header = styled.div`
   display: flex;
   position: sticky;
   top: 0;
-  background-color: white;
   z-index: 2;
+  background-color: white;
   justify-content: space-between;
   align-items: center;
   padding: 15px;
