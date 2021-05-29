@@ -13,10 +13,12 @@ import { useState } from "react";
 import firebase from "firebase";
 import getRecipientEmail from "../utils/getRecipientEmail";
 import TimeAgo from "timeago-react";
+import { useRef } from "react";
 
 function ChatScreen({ chat, messages }) {
   const [user] = useAuthState(auth);
   const router = useRouter();
+  const endOfMessageRef = useRef(null); //* reference auto scroll when user sending message
   const [input, setInput] = useState("");
 
   //* capturing data from database
@@ -47,6 +49,14 @@ function ChatScreen({ chat, messages }) {
     }
   };
 
+  //* scroll when user send message
+  const scrollToBottom = () => {
+    endOfMessageRef.current.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+  };
+
   const sendMessage = (e) => {
     e.preventDefault();
 
@@ -66,6 +76,7 @@ function ChatScreen({ chat, messages }) {
     });
 
     setInput("");
+    scrollToBottom();
   };
 
   const [recipientSnapshot] = useCollection(
@@ -114,7 +125,7 @@ function ChatScreen({ chat, messages }) {
       {/* MESSAGE CONTAINER */}
       <MessageContainer>
         {showMessages()}
-        <EndOfMessage />
+        <EndOfMessage ref={endOfMessageRef} />
       </MessageContainer>
 
       <InputContainer>
@@ -184,7 +195,9 @@ const HeaderInformation = styled.div`
 
 const HeaderIcons = styled.div``;
 
-const EndOfMessage = styled.div``;
+const EndOfMessage = styled.div`
+  margin-bottom: 50px;
+`;
 const MessageContainer = styled.div`
   padding: 30px;
   background-color: #e5ded8;
